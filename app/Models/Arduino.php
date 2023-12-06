@@ -18,4 +18,9 @@ class Arduino extends Model
         'imei',
     ];
 
+    public function logs()
+    {
+        return $this->hasMany(Log::class);
+    }
+
 }

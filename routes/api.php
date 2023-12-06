@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArduinoController;
+use App\Http\Controllers\LogController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,4 +19,5 @@ Route::prefix('/arduino')->group( function () {
     Route::post('/create', [ArduinoController::class, 'create']);
     Route::post('/', [ArduinoController::class, 'show']);
     Route::get('/', [ArduinoController::class, 'index']);
+    Route::post('/log', [LogController::class, 'store']);
 });

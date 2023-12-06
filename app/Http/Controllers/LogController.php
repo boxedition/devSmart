@@ -10,22 +10,6 @@ use Illuminate\Support\Facades\Validator;
 class LogController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -68,9 +52,24 @@ class LogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Log $log)
+    public function water(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'imei'=> ['required'],
+        ]);
+
+        if($validator->fails()){
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
+        }
+
+        
+        $arduino = Arduino::where('imei', $request->imei)->first();
+        
+        $log = $arduino->logs()->latest()->limit(1)->get();
+
+        return response($log)
     }
 
     /**

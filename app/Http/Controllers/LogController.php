@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class LogController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Creates a newly created Log.
      */
     public function store(Request $request)
     {
@@ -50,7 +50,7 @@ class LogController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Override irrigation.
      */
     public function water(Request $request)
     {
@@ -63,36 +63,11 @@ class LogController extends Controller
                 'message' => 'Invalid Fields',
             ],402);
         }
-
         
-        $arduino = Arduino::where('imei', $request->imei)->first();
-        
-        $log = $arduino->logs()->latest()->limit(1)->get();
+        $arduino = Arduino::where('imei', $request->imei)->first();              
 
-        return response($log)
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Log $log)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Log $log)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Log $log)
-    {
-        //
+        return response([
+            'water' => $arduino->is_water_active
+        ]);
     }
 }

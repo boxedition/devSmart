@@ -9,6 +9,35 @@ use Illuminate\Support\Facades\Validator;
 
 class LogController extends Controller
 {
+
+    /**
+     * Creates a newly created Log.
+     */
+    public function index(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'imei'=> ['required'],
+        ]);
+
+        if($validator->fails()){
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
+        }
+
+        $arduino = Arduino::where('imei', $request->imei)->first();
+        
+        if (!$arduino) {
+            return response([
+                'message' => 'No Arduino founded.',
+            ],403);
+        }
+
+        $logs = $arduino->logs()->latest()->limit(30)->get();;
+        
+        return response($logs);
+    }
+
     /**
      * Creates a newly created Log.
      */
@@ -49,25 +78,5 @@ class LogController extends Controller
         return response($log);
     }
 
-    /**
-     * Override irrigation.
-     */
-    public function water(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'imei'=> ['required'],
-        ]);
 
-        if($validator->fails()){
-            return response([
-                'message' => 'Invalid Fields',
-            ],402);
-        }
-        
-        $arduino = Arduino::where('imei', $request->imei)->first();              
-
-        return response([
-            'water' => $arduino->is_water_active
-        ]);
-    }
 }

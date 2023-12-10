@@ -63,26 +63,99 @@ class ArduinoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Override irrigation.
      */
-    public function edit(Arduino $arduino)
+    public function water(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'imei'=> ['required'],
+        ]);
+
+        if($validator->fails()){
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
+        }
+        
+        $arduino = Arduino::where('imei', $request->imei)->first();              
+
+        return response([
+            'water' => $arduino->is_water_active
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Tunn on Override irrigation.
      */
-    public function update(Request $request, Arduino $arduino)
+    public function water_on(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'imei'=> ['required'],
+        ]);
+
+        if($validator->fails()){
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
+        }
+        
+
+        $arduino = Arduino::where('imei', $request->imei)->first();  
+
+        $arduino->is_water_active = true;
+        $arduino->save();            
+
+        return response($arduino);
+    }
+
+
+    /**
+     * Tunn off Override irrigation.
+     */
+    public function water_off(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'imei'=> ['required'],
+        ]);
+
+        if($validator->fails()){
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
+        }
+        
+
+        $arduino = Arduino::where('imei', $request->imei)->first();  
+
+        $arduino->is_water_active = false;
+        $arduino->save();            
+
+        return response($arduino);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Switchs Override irrigation.
      */
-    public function destroy(Arduino $arduino)
+    public function water_switch(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'imei'=> ['required'],
+        ]);
+
+        if($validator->fails()){
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
+        }
+        
+
+        $arduino = Arduino::where('imei', $request->imei)->first();  
+
+        $arduino->is_water_active =!$arduino->is_water_active;
+        $arduino->save();            
+
+        return response($arduino);
     }
+
+
 }

@@ -26,7 +26,9 @@ class ArduinoController extends Controller
         ]);
 
         if($validator->fails()){
-            //
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
         }
 
         $arduino = Arduino::where('imei', $request->imei)->first();
@@ -85,7 +87,7 @@ class ArduinoController extends Controller
     }
 
     /**
-     * Tunn on Override irrigation.
+     * Tuns on Override irrigation.
      */
     public function water_on(Request $request)
     {

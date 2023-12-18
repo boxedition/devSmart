@@ -25,4 +25,5 @@ Route::prefix('/arduino')->group( function () {
     Route::post('/water/switch',[ArduinoController::class, 'water_switch']);
     Route::post('/log', [LogController::class, 'store']);
     Route::post('/logs', [LogController::class, 'index']);
+    Route::post('/log/recent', [LogController::class, 'recent']);
 });

@@ -38,6 +38,34 @@ class LogController extends Controller
         return response($logs);
     }
 
+        /**
+     * Creates a newly created Log.
+     */
+    public function recent(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'imei'=> ['required'],
+        ]);
+
+        if($validator->fails()){
+            return response([
+                'message' => 'Invalid Fields',
+            ],402);
+        }
+
+        $arduino = Arduino::where('imei', $request->imei)->first();
+        
+        if (!$arduino) {
+            return response([
+                'message' => 'No Arduino founded.',
+            ],403);
+        }
+
+        $logs = $arduino->logs()->latest()->limit(1)->get();;
+        
+        return response($logs);
+    }
+
     /**
      * Creates a newly created Log.
      */

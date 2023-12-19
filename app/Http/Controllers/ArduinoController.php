@@ -173,19 +173,34 @@ class ArduinoController extends Controller
 
         $imageName = time().'.'.$request->image->extension();
 
-        // Public Folder
-        //$request->image->move(public_path('images'), $imageName);
-
         //Store in Storage Folder
         $path = $request->image->storeAs('images', $imageName);
 
         $arduino->img_path = $path;
+        $arduino->save();            
 
-        // // Store in S3
-        // $request->image->storeAs('images', $imageName, 's3');
+        return response($arduino);
+    }
 
-        //Store IMage in DB 
+    /**
+     * Upload Object and Stores it.
+     */
+    public function storeObject(Request $request)
+    {
+        $request->validate([
+            'imei' => 'required',
+            'object' => 'required',
+        ]);
 
+        $arduino = Arduino::where('imei', $request->imei)->first();  
+
+        $objectName = time().'.'.'obj';
+
+        //Store in Storage Folder
+        $path = $request->object->storeAs('objects', $objectName);
+
+        $arduino->obj_path = $path;
+        $arduino->save();   
 
         return response($arduino);
     }

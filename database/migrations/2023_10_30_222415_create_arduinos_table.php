@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('arduinos', function (Blueprint $table) {
             $table->id();
             $table->string("imei")->unique();
-            $table->string("label")->nullable();;
+            $table->string("label")->nullable();
+            $table->string("img_path")->nullable();
+            $table->string("obj_path")->nullable();
             $table->boolean("is_water_active")->default(false);
             $table->timestamps();
         });

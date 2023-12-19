@@ -26,4 +26,6 @@ Route::prefix('/arduino')->group( function () {
     Route::post('/log', [LogController::class, 'store']);
     Route::post('/logs', [LogController::class, 'index']);
     Route::post('/log/recent', [LogController::class, 'recent']);
+    Route::post('/image/upload', [ArduinoController::class, 'storeImage']);
+    Route::post('/object/upload', [ArduinoController::class, 'storeImage']);
 });

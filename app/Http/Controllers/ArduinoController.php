@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Arduino;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ArduinoController extends Controller
 {
@@ -203,6 +204,33 @@ class ArduinoController extends Controller
         $arduino->save();   
 
         return response($arduino);
+    }
+
+    /**
+     * Retrieves an object file from storage, encodes it to Base64, and returns the encoded content along with the IMEI of the Arduino device.
+     *
+     * @param Request $request An instance of the Request class containing the IMEI of the Arduino device.
+     * @return \Illuminate\Http\JsonResponse A JSON response containing the IMEI of the Arduino device and the Base64 encoded content of the object file.
+     */
+    public function getObject(Request $request)
+    {
+        $request->validate([
+            'imei' => 'required',
+        ]);
+
+        $arduino = Arduino::where('imei', $request->imei)->first();  
+
+        if (!$arduino->obj_path || !Storage::exists($arduino->obj_path)) {
+            return response()->json(['message' => 'Object file not found.'], 404);
+        }
+
+        // Get the content of the file and encode it to Base64        
+        $fileContent = base64_encode(Storage::get($arduino->obj_path));
+        
+        return response()->json([
+            'imei' => $arduino->imei,
+            'obj_base64' => $fileContent
+        ]);
     }
 
 

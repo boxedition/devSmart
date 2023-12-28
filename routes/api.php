@@ -16,16 +16,21 @@ use App\Http\Controllers\LogController;
 */
 
 Route::prefix('/arduino')->group( function () {
-    Route::post('/create', [ArduinoController::class, 'create']);
     Route::post('/', [ArduinoController::class, 'show']);
     Route::get('/', [ArduinoController::class, 'index']);
+    Route::post('/create', [ArduinoController::class, 'create']);
+
     Route::post('/water',[ArduinoController::class, 'water']);
     Route::post('/water/on',[ArduinoController::class, 'water_on']);
     Route::post('/water/off',[ArduinoController::class, 'water_off']);
     Route::post('/water/switch',[ArduinoController::class, 'water_switch']);
+
     Route::post('/log', [LogController::class, 'store']);
     Route::post('/logs', [LogController::class, 'index']);
     Route::post('/log/recent', [LogController::class, 'recent']);
+
     Route::post('/image/upload', [ArduinoController::class, 'storeImage']);
+
     Route::post('/object/upload', [ArduinoController::class, 'storeObject']);
+    Route::post('/object', [ArduinoController::class, 'getObject']);
 });

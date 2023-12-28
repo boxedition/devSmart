@@ -185,6 +185,7 @@ class ArduinoController extends Controller
 
     /**
      * Upload Object and Stores it.
+     * Note: Object is a zip file
      */
     public function storeObject(Request $request)
     {
@@ -195,7 +196,7 @@ class ArduinoController extends Controller
 
         $arduino = Arduino::where('imei', $request->imei)->first();  
 
-        $objectName = time().'.'.'obj';
+        $objectName = time().'.'.$request->object->extension();
 
         //Store in Storage Folder
         $path = $request->object->storeAs('objects', $objectName);
@@ -230,6 +231,27 @@ class ArduinoController extends Controller
         return response()->json([
             'imei' => $arduino->imei,
             'obj_base64' => $fileContent
+        ]);
+    }
+
+    public function getImage(Request $request)
+    {
+        $request->validate([
+            'imei' => 'required',
+        ]);
+
+        $arduino = Arduino::where('imei', $request->imei)->first();  
+
+        if (!$arduino->img_path || !Storage::exists($arduino->img_path)) {
+            return response()->json(['message' => 'Object file not found.'], 404);
+        }
+
+        // Get the content of the file and encode it to Base64        
+        $fileContent = base64_encode(Storage::get($arduino->img_path));
+        
+        return response()->json([
+            'imei' => $arduino->imei,
+            'img_base64' => $fileContent
         ]);
     }
 

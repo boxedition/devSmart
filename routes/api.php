@@ -30,6 +30,7 @@ Route::prefix('/arduino')->group( function () {
     Route::post('/log/recent', [LogController::class, 'recent']);
 
     Route::post('/image/upload', [ArduinoController::class, 'storeImage']);
+    Route::post('/image', [ArduinoController::class, 'getImage']);
 
     Route::post('/object/upload', [ArduinoController::class, 'storeObject']);
     Route::post('/object', [ArduinoController::class, 'getObject']);

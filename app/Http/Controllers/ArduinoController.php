@@ -196,10 +196,10 @@ class ArduinoController extends Controller
 
         $arduino = Arduino::where('imei', $request->imei)->first();  
 
-        $objectName = time().'.'.$request->object->extension();
+        $objectName = time().'.'.'glb';
 
         //Store in Storage Folder
-        $path = $request->object->storeAs('objects', $objectName);
+        $path = $request->object->storeAs('glb', $objectName);
 
         $arduino->obj_path = $path;
         $arduino->save();   

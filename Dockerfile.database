@@ -9,8 +9,5 @@ ARG MYSQL_DATABASE="devsmartgrow"
 ENV MYSQL_DATABASE=$MYSQL_DATABASE
 ENV MYSQL_ALLOW_EMPTY_PASSWORD=1
 
-# Define a volume mapping in the Dockerfile
-VOLUME mysql:/var/lib/mysql
-
 # Expose the MySQL port
 EXPOSE 3306

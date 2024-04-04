@@ -1,0 +1,30 @@
+FROM php:8.1-fpm-alpine
+
+# Install Git to clone project
+RUN apk update && apk add --no-cache git
+
+#Extentions for mysql
+RUN docker-php-ext-install pdo pdo_mysql
+
+#Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- \
+     --install-dir=/usr/local/bin --filename=composer
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set the working directory
+WORKDIR /app
+
+# Clone the Git repository to working dir
+RUN git clone https://github.com/boxedition/devSmart.git .
+
+RUN cp .env.example .env
+
+#Intallar composer dependencies
+RUN composer install
+
+RUN php artisan key:generate
+
+CMD php artisan serve --host=0.0.0.0 --port=8080
+
+EXPOSE 8080

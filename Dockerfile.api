@@ -23,6 +23,9 @@ RUN cp .env.example .env
 #Intallar composer dependencies
 RUN composer install
 
+#Adicinar package require
+#RUN composer require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies
+
 RUN php artisan key:generate
 
 CMD php artisan serve --host=0.0.0.0 --port=8080
